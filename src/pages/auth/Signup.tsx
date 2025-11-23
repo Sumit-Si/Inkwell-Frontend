@@ -2,12 +2,89 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AvailableUserRoles, UserRoleEnum } from "@/utils/constants";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-const Signup =() => {
+const formSchema = z.object({
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters." })
+    .max(50, { message: "Username must be less than 50 characters." })
+    .regex(/^[a-z0-9._]+$/, {
+      message:
+        "Username can only contain lowercase letters, numbers, dots, and underscores.",
+    })
+    .transform((val) => val.toLowerCase()),
+
+  email: z
+    .email("Invalid email address")
+    .nonempty("Email is required")
+    .max(50, "Email must be less than 50 characters")
+    .lowercase("Email must be lowercase")
+    .trim(),
+
+  fullName: z
+    .string()
+    .min(5, { message: "Full name must be at least 5 characters." })
+    .max(50, { message: "Full name must be less than 50 characters." })
+    .regex(/^[A-Za-z\s]+$/, {
+      message: "Full name can only contain letters and spaces.",
+    })
+    .optional(),
+
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters." })
+    .max(20, { message: "Password must be less than 20 characters." })
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,20}$/,
+      "Password must include 1 uppercase, lowercase, 1 number, and 1 special character."
+    )
+    .trim(),
+
+  role: z.enum(AvailableUserRoles),
+});
+
+const Signup = () => {
   const [loading, setLoading] = useState(false);
+
+  // react hook form initial
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      role: UserRoleEnum.USER,
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,8 +96,8 @@ const Signup =() => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-lg shadow-lg border rounded-2xl">
-        <CardHeader className="text-center space-y-2">
-          <CardTitle className="text-2xl font-bold tracking-tight">
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl font-bold tracking-tight">
             Create an Account
           </CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -29,65 +106,118 @@ const Signup =() => {
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input id="fullName" placeholder="John Doe" required />
-            </div>
+          <Form {...form}>
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-col gap-4">
+                <FormField
+                  control={form.control}
+                  name="role"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-3">
+                      <FormLabel>Register as</FormLabel>
 
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="johndoe123" required />
-            </div>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          className="grid grid-cols-2 gap-0 border border-input rounded-md p-0.5"
+                        >
+                          <Label className="h-[34px] w-full grid place-items-center rounded-s-sm text-muted-foreground hover:text-foreground has-checked:bg-secondary has-checked:text-secondary-foreground">
+                            <RadioGroupItem value="USER" className="sr-only" />
+                            User
+                          </Label>
+                          <Label className="h-[34px] w-full grid place-items-center rounded-e-sm text-muted-foreground hover:text-foreground has-checked:bg-secondary has-checked:text-secondary-foreground">
+                            <RadioGroupItem value="ADMIN" className="sr-only" />
+                            Admin
+                          </Label>
+                        </RadioGroup>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="fullName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="John Doe" />
+                      </FormControl>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                required
-              />
-            </div>
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="johndoe123" />
+                      </FormControl>
 
-            <div className="space-y-2">
-              <Label>Role</Label>
-              <Select required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="user">User</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : "Register"}
-            </Button>
-          </form>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="you@example.com" />
+                      </FormControl>
 
-          <p className="text-center text-sm mt-4 text-muted-foreground">
-            Already have an account?{" "}
-            <Link to="/login" viewTransition className="text-primary hover:underline">
-              Login
-            </Link>
-          </p>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="••••••••" />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="pt-1.5">
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Signing up..." : "Register"}
+                  </Button>
+                </div>
+              </div>
+
+              <p className="text-center text-sm pt-2 text-muted-foreground">
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  viewTransition
+                  className="text-primary hover:underline"
+                >
+                  Login
+                </Link>
+              </p>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
   );
-}
+};
 
 export default Signup;

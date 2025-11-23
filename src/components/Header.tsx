@@ -41,7 +41,7 @@ const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
                   </Link>
                 </Button>
                 <Button asChild>
-                  <Link to="/register" viewTransition onClick={(prev) => setMobileOpen(!prev)}>
+                  <Link to="/signup" viewTransition onClick={(prev) => setMobileOpen(!prev)}>
                     Sign Up
                   </Link>
                 </Button>

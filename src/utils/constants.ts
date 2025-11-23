@@ -1,8 +1,8 @@
 import type { UserRole } from "@/types";
 
 const UserRoleEnum: UserRole = {
-    ADMIN: "admin",
-    USER: "user",
+    ADMIN: "ADMIN",
+    USER: "USER",
 }
 
 const AvailableUserRoles: string[] = Object.values(UserRoleEnum);
