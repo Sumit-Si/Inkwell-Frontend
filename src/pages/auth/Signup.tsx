@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,12 +26,15 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AvailableUserRoles, UserRoleEnum } from "@/utils/constants";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import useAuthStore from "@/store/useAuthStore";
+import { LoaderCircleIcon } from "lucide-react";
+import authService from "@/api/authService";
 
 const formSchema = z.object({
   username: z
@@ -70,27 +73,33 @@ const formSchema = z.object({
     )
     .trim(),
 
-  role: z.enum(AvailableUserRoles),
+  role: z.enum(AvailableUserRoles).optional(),
 });
 
 const Signup = () => {
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { authUser, signup, isSignInUp } = useAuthStore();
 
   // react hook form initial
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: "",
+      fullName: "",
       email: "",
       password: "",
       role: UserRoleEnum.USER,
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    // handle register logic
-    setTimeout(() => setLoading(false), 1500);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await signup(values);
+
+      navigate("/login");
+    } catch (error) {
+      console.log("Error", error);
+    }
   };
 
   return (
@@ -107,9 +116,9 @@ const Signup = () => {
 
         <CardContent>
           <Form {...form}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-4">
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="role"
                   render={({ field }) => (
@@ -134,7 +143,7 @@ const Signup = () => {
                       </FormControl>
                     </FormItem>
                   )}
-                />
+                /> */}
                 <FormField
                   control={form.control}
                   name="fullName"
@@ -182,7 +191,7 @@ const Signup = () => {
 
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="password"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Password</FormLabel>
@@ -196,8 +205,15 @@ const Signup = () => {
                 />
 
                 <div className="pt-1.5">
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Signing up..." : "Register"}
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isSignInUp}
+                  >
+                    {isSignInUp && (
+                      <LoaderCircleIcon className="animate-spin" />
+                    )}
+                    <span>Signup</span>
                   </Button>
                 </div>
               </div>

@@ -1,8 +1,20 @@
 import { create } from "zustand";
 import authService from "../api/authService";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
+import type { ErrorResponse, loginData, UserData } from "@/types";
 
-const useAuthStore = create((set) => ({
+type AuthState = {
+  authUser: UserData | null;
+  isSignInUp: boolean;
+  isLoggingIn: boolean;
+  isCheckingAuth: boolean;
+  checkAuth: () => Promise<void>;
+  login: (credientials: { email: string; password: string }) => Promise<void>;
+  signup: (userData: UserData) => Promise<void>;
+  logout: () => Promise<void>;
+};
+
+const useAuthStore = create<AuthState>((set) => ({
   authUser: null,
   isSignInUp: false,
   isLoggingIn: false,
@@ -12,7 +24,7 @@ const useAuthStore = create((set) => ({
     set({ isCheckingAuth: true });
 
     try {
-      const res = await authService.getProfile();
+      const res = await authService.getMe();
       console.log("Checking auth", res);
 
       set({ authUser: res.user });
@@ -33,20 +45,22 @@ const useAuthStore = create((set) => ({
       set({ authUser: res.user });
       toast.success("Signup successfully");
     } catch (error) {
-      console.log("Error signing up: ", error);
-      toast.error(error?.response?.data?.error || error?.response?.data?.message)
+      console.log("Error signing up: ", error?.response?.data?.error);
+      toast.error(error?.response?.data?.error || error?.response?.data?.message);
     } finally {
       set({ isSignInUp: false });
     }
   },
 
-  login: async (credientials) => {
+  login: async (credientials: loginData) => {
     set({ isLoggingIn: true });
     try {
       const res = await authService.login(credientials);
       console.log("Login res: ", res);
-      set({ authUser: res?.user });
+      const user = res?.user;
+      set({ authUser: user });
       toast.success("Login successfully");
+      // return user;
     } catch (error) {
       console.log("Error logging in: ", error);
       toast.error(

@@ -2,6 +2,7 @@ import RootLayout from "@/layouts/RootLayout";
 import RootErrorBoundary from "@/pages/errors/RootErrorBoundary";
 import Home from "@/pages/Home/Home";
 import homeLoader from "@/routes/loaders/user/homeLoader";
+import AuthGuard from "./guards/AuthGuard";
 
 const rootRoutes = {
   path: "/",
@@ -9,11 +10,17 @@ const rootRoutes = {
   errorElement: <RootErrorBoundary />,
   children: [
     {
-      index: true,
-      element: <Home />,
-      loader: homeLoader,
-      handle: { breadcrumb: "Home" }
+      element: <AuthGuard />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+          loader: homeLoader,
+          handle: { breadcrumb: "Home" },
+        },
+      ],
     },
+
     // {
     //   path: "blogs",
     //   element: <Blogs />,
@@ -26,7 +33,7 @@ const rootRoutes = {
     //   loader: blogDetailLoader,
     //   handle: { breadcrumb: (data) => data?.title ?? "Blog" }
     // }
-  ]
+  ],
 };
 
 export default rootRoutes;

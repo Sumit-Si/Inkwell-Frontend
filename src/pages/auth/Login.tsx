@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -16,6 +16,8 @@ import {
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useAuthStore from "@/store/useAuthStore";
+import { LoaderCircleIcon } from "lucide-react";
 // import GoogleIcon from "lucide-react";
 
 // Login form Schema
@@ -32,7 +34,8 @@ const formSchema = z.object({
 });
 
 const LoginPage = () => {
-  const [loading, setLoading] = useState(false);
+  const {login,isLoggingIn,authUser} = useAuthStore();
+  const navigate = useNavigate();
 
   // react hook form initial
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,11 +46,14 @@ const LoginPage = () => {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    // handle login logic
-    setTimeout(() => setLoading(false), 1500);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("values",values);
+    try {
+      await login(values);
+      if(authUser) navigate("/");
+    } catch (error) {
+      console.log("Error on login:",error);
+    }
   };
 
   return (
@@ -64,7 +70,7 @@ const LoginPage = () => {
 
         <CardContent>
           <Form {...form}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-4">
                 <FormField
                   control={form.control}
@@ -97,8 +103,9 @@ const LoginPage = () => {
                 />
 
                 <div className="pt-1.5">
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Logging in..." : "Login"}
+                  <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                    {isLoggingIn && <LoaderCircleIcon className="animate-spin" />}
+                    <span>Login</span>
                   </Button>
                 </div>
 
