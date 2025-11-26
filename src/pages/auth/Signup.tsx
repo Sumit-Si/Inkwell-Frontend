@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,27 +11,17 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AvailableUserRoles, UserRoleEnum } from "@/utils/constants";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import useAuthStore from "@/store/useAuthStore";
 import { LoaderCircleIcon } from "lucide-react";
-import authService from "@/api/authService";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   username: z
@@ -77,8 +64,8 @@ const formSchema = z.object({
 });
 
 const Signup = () => {
+  const {signup, isSignInUp } = useAuthStore();
   const navigate = useNavigate();
-  const { authUser, signup, isSignInUp } = useAuthStore();
 
   // react hook form initial
   const form = useForm<z.infer<typeof formSchema>>({
@@ -95,10 +82,9 @@ const Signup = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await signup(values);
-
-      navigate("/login");
+      navigate("/login",{viewTransition: true});
     } catch (error) {
-      console.log("Error", error);
+      console.log("Error on signup:", error);
     }
   };
 

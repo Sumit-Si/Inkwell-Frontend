@@ -1,14 +1,8 @@
-import type { UserRole } from "@/types";
-
-const UserRoleEnum: UserRole = {
+const UserRoleEnum = {
     ADMIN: "ADMIN",
     USER: "USER",
-}
+} as const;
 
-const AvailableUserRoles: string[] = Object.values(UserRoleEnum);
+const AvailableUserRoles = Object.values(UserRoleEnum);
 
-
-export {
-    UserRoleEnum,
-    AvailableUserRoles,
-}
+export { UserRoleEnum, AvailableUserRoles };

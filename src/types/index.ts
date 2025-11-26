@@ -1,7 +1,4 @@
-export type UserRole = {
-    ADMIN: string;
-    USER: string;
-}
+export type UserRole = "ADMIN" | "USER";
 
 export interface UserData {
     username: string;
@@ -21,26 +18,26 @@ export type ApiKeyData = {
 }
 
 export type FieldValidationError = {
-  /**
-   * Indicates that the error occurred because a field had an invalid value
-   */
-  type: 'field';
-  /**
-   * The location within the request where this field is
-   */
-  location: Location;
-  /**
-   * The path to the field which has a validation error
-   */
-  path: string;
-  /**
-   * The value of the field. It might be unset if the value is hidden.
-   */
-  value?: string;
-  /**
-   * The error message
-   */
-  msg: string;
+    /**
+     * Indicates that the error occurred because a field had an invalid value
+     */
+    type: 'field';
+    /**
+     * The location within the request where this field is
+     */
+    location: Location;
+    /**
+     * The path to the field which has a validation error
+     */
+    path: string;
+    /**
+     * The value of the field. It might be unset if the value is hidden.
+     */
+    value?: string;
+    /**
+     * The error message
+     */
+    msg: string;
 };
 
 export type ErrorCode =
@@ -71,5 +68,5 @@ export interface ActionResponse<T = unknown> {
 
 export interface AuthResponse {
     accessToken: string;
-    user: Pick<UserData, 'username' | 'fullName' | 'email' | 'role'>;
+    user: Pick<UserData, "username" | "fullName" | "email" | "role">;
 }

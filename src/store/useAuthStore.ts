@@ -40,11 +40,10 @@ const useAuthStore = create<AuthState>((set) => ({
     set({ isSignInUp: true });
     try {
       const res = await authService.register(userData);
-      console.log("Signup res: ", res);
-
-      set({ authUser: res.user });
+      console.log("Signup res: ", res?.data);
+      set({ authUser: res?.data}); 
       toast.success("Signup successfully");
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error signing up: ", error?.response?.data?.error);
       toast.error(error?.response?.data?.error || error?.response?.data?.message);
     } finally {
@@ -57,11 +56,10 @@ const useAuthStore = create<AuthState>((set) => ({
     try {
       const res = await authService.login(credientials);
       console.log("Login res: ", res);
-      const user = res?.user;
+      const user = res?.data;
       set({ authUser: user });
       toast.success("Login successfully");
-      // return user;
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error logging in: ", error);
       toast.error(
         error?.response?.data?.error || error?.response?.data?.message

@@ -15,24 +15,24 @@ const rootRoutes = {
         {
           index: true,
           element: <Home />,
-          loader: homeLoader,
+          // loader: homeLoader,
           handle: { breadcrumb: "Home" },
         },
+
+        // {
+        //   path: "blogs",
+        //   element: <Blogs />,
+        //   loader: userBlogLoader,
+        //   handle: { breadcrumb: "Blogs" }
+        // },
+        // {
+        //   path: "blogs/:slug",
+        //   element: <BlogDetail />,
+        //   loader: blogDetailLoader,
+        //   handle: { breadcrumb: (data) => data?.title ?? "Blog" }
+        // }
       ],
     },
-
-    // {
-    //   path: "blogs",
-    //   element: <Blogs />,
-    //   loader: userBlogLoader,
-    //   handle: { breadcrumb: "Blogs" }
-    // },
-    // {
-    //   path: "blogs/:slug",
-    //   element: <BlogDetail />,
-    //   loader: blogDetailLoader,
-    //   handle: { breadcrumb: (data) => data?.title ?? "Blog" }
-    // }
   ],
 };
 

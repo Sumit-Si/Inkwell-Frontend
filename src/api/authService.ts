@@ -18,7 +18,7 @@ const authService = {
     },
 
     generateApiKey: async (apiKeyData: ApiKeyData) => {
-        const response = await axiosInstance.post("/users/api-key",apiKeyData);
+        const response = await axiosInstance.post("/users/api-key", apiKeyData);
         return response.data;
     },
 

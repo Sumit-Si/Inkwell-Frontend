@@ -50,7 +50,6 @@ const LoginPage = () => {
     console.log("values",values);
     try {
       await login(values);
-      if(authUser) navigate("/");
     } catch (error) {
       console.log("Error on login:",error);
     }

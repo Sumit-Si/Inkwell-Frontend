@@ -1,11 +1,14 @@
 import { Outlet } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Loading from "@/components/Loading";
 
 const RootLayout = () => {
   
   return (
     <div className="min-h-dvh flex flex-col bg-background text-foreground">
+      <Loading className='z-40' />
+      
       {/* Header */}
       <Header />
 
