@@ -15,7 +15,7 @@ const rootRoutes = {
         {
           index: true,
           element: <Home />,
-          // loader: homeLoader,
+          loader: homeLoader,
           handle: { breadcrumb: "Home" },
         },
 

@@ -16,7 +16,7 @@ const PublicGuard = () => {
         if(!isCheckingAuth && authUser) {
             navigate("/", {viewTransition: true});
         }
-    }, [authUser,isCheckingAuth,navigate]);
+    }, [authUser,navigate,isCheckingAuth]);
 
     if(isCheckingAuth) {
         return (

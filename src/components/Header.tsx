@@ -6,10 +6,11 @@ import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Separator } from "./ui/separator";
+import useAuthStore from "@/store/useAuthStore";
 
 const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const user = null;
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const {authUser} = useAuthStore();
 
   return (
     <header
@@ -31,7 +32,7 @@ const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
           <Navbar className="max-md:p-3 md:ms-4" />
 
           {/* Auth Buttons */}
-          {!user && (
+          {!authUser && (
             <>
               <Separator className="md:hidden" />
               <div className="flex flex-col-reverse gap-y-3 gap-x-2 md:flex-row md:items-center max-md:p-3">

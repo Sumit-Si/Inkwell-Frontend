@@ -70,3 +70,72 @@ export interface AuthResponse {
     accessToken: string;
     user: Pick<UserData, "username" | "fullName" | "email" | "role">;
 }
+
+export interface PaginatedResponse<T> {
+    data: {
+        posts: T[],
+    };                    // posts, users, etc.
+    metadata: {
+        currentPage: number;
+        currentLimit: number;
+        totalPages: number;
+    };
+}
+
+export type Rating = 1 | 2 | 3 | 4 | 5;
+
+
+// Posts types
+export interface Posts {
+    id: string;
+    title: string;
+    slug?: string;
+    description?: string | null;
+    bannerImage: {
+        url: string;
+        size: number;
+        format: string;
+    };
+    author: UserData;
+    status: "PENDING" | "APPROVED" | "REJECTED" | "PUBLISHED";
+    createdAt: string;
+    updatedAt: string;
+    postedAt: string;
+    categories?: Category[];
+    postReview?: PostReview[];
+    comments?: Comment[];
+}
+
+export interface Category {
+    id: string;
+    categoryName: string;
+    parentId?: string;
+    createdBy: string;
+    createdAt: string;
+    updatedAt: string;
+
+    posts: Posts[];
+    user: UserData;
+    children: Category[];
+}
+
+export interface PostReview {
+    id: string;
+    postId: string;
+    comment: string;
+    rating?: Rating;
+    reviewer: string;
+    status: "PENDING" | "APPROVED" | "REJECTED";
+    author: Pick<UserData, "username" | "fullName">;
+}
+
+export interface Comment {
+    id: string;
+    message: string;
+    createdBy: string;
+    postId: string;
+    parentId?: string;
+    editedAt?: string;
+    status: "PENDING" | "APPROVED" | "REJECTED";
+    likesCount: number;
+}

@@ -27,9 +27,10 @@ const useAuthStore = create<AuthState>((set) => ({
       const res = await authService.getMe();
       console.log("Checking auth", res);
 
-      set({ authUser: res.user });
+      set({ authUser: res?.data });
     } catch (error) {
       console.log("Error checking auth: ", error);
+      if(error?.response?.data?.error) toast.error(error?.response?.data?.error);
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
