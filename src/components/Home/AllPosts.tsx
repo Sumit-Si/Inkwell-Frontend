@@ -53,9 +53,10 @@ const AllPosts = ({ className, ...props }: React.ComponentProps<"section">) => {
           variants={listVariant}
         >
           {allPosts.data.posts.map(
-            ({ slug, bannerImage, title, description, author, postedAt }, index) => (
+            ({ id,slug, bannerImage, title, description, author, postedAt }, index) => (
               <motion.li key={slug} variants={itemVariant}>
                 <BlogCard
+                  id={id}
                   bannerImage={bannerImage}
                   title={title}
                   description={description || ""}

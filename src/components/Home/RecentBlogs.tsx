@@ -56,13 +56,14 @@ const RecentBlogs = ({
           variants={listVariant}
         >
           {recentPosts.data.posts.map(
-            ({ slug, bannerImage, title, description, author, postedAt }, index) => (
+            ({ id, slug, bannerImage, title, description, author, postedAt }, index) => (
               <motion.li
                 key={slug}
                 className={cn(index === 0 && "lg:row-span-3")}
                 variants={itemVariant}
               >
                 <BlogCard
+                  id={id}
                   bannerImage={bannerImage}
                 //   bannerSize={bannerImage?.size}
                   title={title}

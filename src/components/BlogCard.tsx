@@ -15,6 +15,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { formatDistanceToNowStrict } from "date-fns";
 
 interface PostCardProps extends React.ComponentProps<"div"> {
+  id: string;
   bannerImage: string;
 //   bannerSize: number;
   title: string;
@@ -28,6 +29,7 @@ interface PostCardProps extends React.ComponentProps<"div"> {
 const BlogCard: React.FC<PostCardProps> = ({
   bannerImage,
 //   bannerSize,
+  id,
   title,
   slug,
   authorName,
@@ -80,7 +82,7 @@ const BlogCard: React.FC<PostCardProps> = ({
           </Tooltip>
         </div>
 
-        <Link to={`/blogs/${slug}`} viewTransition>
+        <Link to={`/posts/${id}`} viewTransition>
           <CardTitle
             className={cn(
               "underline-offset-4 hover:underline leading-tight line-clamp-2",
@@ -102,7 +104,7 @@ const BlogCard: React.FC<PostCardProps> = ({
       </CardHeader>
 
       <CardContent className="px-2">
-        <Link to={`/blogs/${slug}`} viewTransition>
+        <Link to={`/posts/${id}`} viewTransition>
           <AspectRatio ratio={21 / 9} className="rounded-lg overflow-hidden">
             <img
               src={bannerImage}

@@ -1,7 +1,7 @@
-import AllPosts from "@/components/Home/AllPosts"
-import Hero from "@/components/Home/Hero"
-import RecentBlogs from "@/components/Home/RecentBlogs"
-import Page from "@/components/Page"
+import AllPosts from "@/components/Home/AllPosts";
+import Hero from "@/components/Home/Hero";
+import RecentBlogs from "@/components/Home/RecentBlogs";
+import Page from "@/components/Page";
 
 const Home = () => {
   return (
@@ -12,7 +12,7 @@ const Home = () => {
 
       <AllPosts />
     </Page>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

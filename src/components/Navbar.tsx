@@ -9,8 +9,8 @@ const NAV_LINKS = [
     label: 'Home',
   },
   {
-    href: '/blogs',
-    label: 'Blog',
+    href: '/posts',
+    label: 'Post',
   },
   {
     href: '/about',
