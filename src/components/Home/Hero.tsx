@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 
 // Constants
 const HERO = {
-  headline: "Mastering the Craft, One Bit at a Time.",
-  text: "This blog is built on a simple principle: the best way to understand a topic is to explain it. Follow along through a growing library of articles and videos to learn how to master the craft of web development.",
+  headline: "Inkwell — Write. Publish. Inspire.",
+  text: "A simple, modern platform designed for writers who want to focus on their stories — no distractions, no friction. Publish your blog seamlessly and grow your audience with powerful tools built for creators.",
 } as const;
 
 // Motion variants
