@@ -40,9 +40,13 @@ const RootErrorBoundary = () => {
           <h1 className="text-3xl mb-8 font-semibold text-center text-foreground">
             Error
           </h1>
-          <p className="text-red-600 text-center bg-red-800/15 rounded-lg py-2 px-3">{error.message}</p>
+          <p className="text-red-600 text-center bg-red-800/15 rounded-lg py-2 px-3">
+            {error.message}
+          </p>
           <div className="max-h-80 overflow-y-scroll border-2 border-red-500/30 rounded-lg p-2 mt-5">
-            <p className="text-base mb-1 font-semibold text-amber-200">The stack trace is:</p>
+            <p className="text-base mb-1 font-semibold text-amber-200">
+              The stack trace is:
+            </p>
             <pre className="text-wrap text-sm">{error.stack || []}</pre>
           </div>
         </div>
